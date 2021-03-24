@@ -77,7 +77,7 @@ def tobs():
     return jsonify(observations_list)
 
 @app.route("/api/v1.0/<start>")
-def start():
+def start(start = None):
 
     temperatures = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs))\
         .filter(Measurement.date > start).all()
@@ -86,10 +86,10 @@ def start():
     return jsonify(temperatures_list)
 
 @app.route("/api/v1.0/<start>/<end>")
-def stop():
+def stop(start = None, end = None):
 
     temperatures_start_stop = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs))\
-        .filter(Measurement.date > start).filter(Measurement.date < stop).all()
+        .filter(Measurement.date > start).filter(Measurement.date < end).all()
 
     temperatures_start_stop_list = list(np.ravel(temperatures_start_stop))
     return jsonify(temperatures_start_stop_list)
